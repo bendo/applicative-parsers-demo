@@ -4,7 +4,7 @@ cabal-version: 2.2
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: cff640df6c6af3f7a5e2a9bac0a09053dd38fb58e247f8e1ba5dd925a8335909
+-- hash: f9907a85b7aacbb8ca527a82f2b79d62cd8444f98058639efd332a70c282c77e
 
 name:           applicative-parsers-demo
 version:        0.0.0.1
@@ -35,19 +35,6 @@ executable demo-parser
       Paths_applicative_parsers_demo
   hs-source-dirs:
       app
-  ghc-options: -threaded -rtsopts -with-rtsopts=-N
-  build-depends:
-      applicative-parsers-demo
-    , base >=4.7 && <5
-  default-language: Haskell2010
-
-test-suite applicative-parsers-demo-test
-  type: exitcode-stdio-1.0
-  main-is: Spec.hs
-  other-modules:
-      Paths_applicative_parsers_demo
-  hs-source-dirs:
-      test
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       applicative-parsers-demo
