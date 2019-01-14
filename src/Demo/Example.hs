@@ -39,7 +39,7 @@ intParser :: Parser Int
 intParser = Parser $ \s -> let res = unParser (some digitParser) s in
   case res of
       [] -> []
-      xs -> [second read (last xs)]
+      (x : xs) -> [second read x]
   where
     digitParser = predP isDigit
 
