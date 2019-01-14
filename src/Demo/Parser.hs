@@ -2,7 +2,7 @@ module Demo.Parser where
 
 import Control.Applicative
 
-import Data.Bifunctor(second)
+import Data.Bifunctor (second)
 import Data.List (isPrefixOf)
 
 -- | Parser is a function that takes an input string and returns
