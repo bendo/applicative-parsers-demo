@@ -12,7 +12,7 @@ data Operator = Add | Mul deriving (Eq, Show)
 
 -- | Simple arithmetic expression AST.
 data Expr = ConstExpr  Int                -- ^ Positive integer constant.
-          | BinaryExpr Operator Expr Expr -- ^ Binary operator application.
+          | BinaryExpr Expr Operator Expr -- ^ Binary operator application.
           | NegateExpr Expr               -- ^ Negation (unary operator).
           deriving (Eq, Show)
 
@@ -28,13 +28,13 @@ exprParser :: Parser Expr
 exprParser = constParser <|> binParser <|> negParser
 
 -- | Constant expression parser.
---   const     ::= int
+--   const ::= int
 constParser :: Parser Expr
 constParser = ConstExpr <$> intParser
 
 -- | Positive integer parser.
---   int       ::= digit{digit}
---   digit     ::= '0' | ... | '9'
+--   int   ::= digit{digit}
+--   digit ::= '0' | ... | '9'
 intParser :: Parser Int
 intParser = Parser $ \s -> let res = unParser (some digitParser) s in
   case res of
@@ -46,20 +46,23 @@ intParser = Parser $ \s -> let res = unParser (some digitParser) s in
 -- | Binary operator expression parser.
 --   binOpExpr ::= '(' expr ' ' binOp ' ' expr ')'
 binParser :: Parser Expr
-binParser = binOp <$> (charP '(' *> exprParser)
-                  <*> (charP ' ' *> binOpParser <* charP ' ')
-                  <*> (exprParser <* charP ')')
-  where
-    binOp e1 op e2 = BinaryExpr op e1 e2
+binParser =
+  charP '(' *>
+    (BinaryExpr <$> exprParser
+                <*> (charP ' ' *> binOpParser <* charP ' ')
+                <*> exprParser
+    )
+  <* charP ')'
+
 
 -- | Binary operator symbol parser.
---   binOp     ::= '+' | '*'
+--   binOp ::= '+' | '*'
 binOpParser :: Parser Operator
 binOpParser = plusParser <|> multParser
   where
-    plusParser = Add <$ charP '+'
-    multParser = Mul <$ charP '*'
+    plusParser = charP '+' $> Add
+    multParser = charP '*' $> Mul
 
 -- | Negation parser.
---   negExpr   ::= '-' expr
+--   negExpr ::= '-' expr
 negParser = charP '-' *> (NegateExpr <$> exprParser)
