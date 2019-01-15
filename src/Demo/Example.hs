@@ -4,6 +4,7 @@ import Control.Applicative
 
 import Data.Bifunctor (second)
 import Data.Char (isDigit)
+import Data.Functor (($>))
 
 import Demo.Parser
 
